@@ -7,8 +7,6 @@ A comprehensive medical report processing system that transforms complex medical
 - Base URL: https://ceaseless-theo-mystical.ngrok-free.dev
 - Swagger UI: https://ceaseless-theo-mystical.ngrok-free.dev/docs
 - Health Check: https://ceaseless-theo-mystical.ngrok-free.dev/health
-
-
 ## Table of Contents
 
 - [Features](#features)
@@ -17,6 +15,7 @@ A comprehensive medical report processing system that transforms complex medical
 - [Technology Stack](#technology-stack)
 - [Setup Instructions](#setup-instructions)
 - [Example Pipeline](#example-pipeline)
+- [Screenshots](#screenshots)
 - [Safety & Validation](#safety--validation)
 - [Backend API](#backend-api)
 - [PowerShell-friendly curl examples](#powershell-friendly-curl-examples)
@@ -207,6 +206,22 @@ npm run dev
   "normalization_confidence": 0.84
 }
 ```
+
+## Screenshots
+
+### Rule-based (Text input)
+
+![Rule-based example 1](images/image1.png)
+
+![Rule-based example 2](images/image2.png)
+
+![Rule-based example 3](images/image3.png)
+
+### LLM (Image upload)
+
+![LLM image example 1](images/image4.png)
+
+![LLM image example 2](images/image5.png)
 
 ## Safety & Validation
 
