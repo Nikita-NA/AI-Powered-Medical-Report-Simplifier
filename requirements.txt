@@ -1,0 +1,21 @@
+# Backend Python dependencies for the FastAPI server
+# Install with: pip install -r requirements.txt
+
+fastapi>=0.110,<0.114
+uvicorn[standard]>=0.23,<0.31
+pydantic>=2.5.0,<3
+
+# OCR stack
+pytesseract>=0.3.10
+opencv-python>=4.8.0
+Pillow>=10.0.0
+numpy>=1.24.0
+
+# PDF rendering for OCR
+pymupdf>=1.22.5
+
+# Environment loading from .env
+python-dotenv>=1.0.0
+
+# HTTP client for optional LLM summaries (Ollama)
+requests>=2.31.0
