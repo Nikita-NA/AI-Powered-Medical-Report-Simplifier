@@ -89,6 +89,7 @@ flowchart LR
     MODEL --> SUMMARIZER
     SUMMARIZER --> API
     API --> UI
+```
 
 ## Sequence Diagram (Step-by-Step Interaction)
 
