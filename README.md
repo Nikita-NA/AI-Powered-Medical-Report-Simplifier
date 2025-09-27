@@ -12,14 +12,17 @@ A comprehensive medical report processing system that transforms complex medical
 ## Table of Contents
 
 - [Features](#features)
+- [Processing Pipeline (Flow)](#processing-pipeline-flow)
+- [System Architecture](#system-architecture)
 - [Technology Stack](#technology-stack)
 - [Setup Instructions](#setup-instructions)
-- [Running Locally (Summary)](#running-locally-summary)
-- [Processing Pipeline](#processing-pipeline)
+- [Example Pipeline](#example-pipeline)
+- [Safety & Validation](#safety--validation)
 - [Backend API](#backend-api)
 - [PowerShell-friendly curl examples](#powershell-friendly-curl-examples)
 - [Ngrok demo (public URL)](#ngrok-demo-public-url)
 - [Submission Checklist](#submission-checklist)
+- [License](#license)
 
 ## Features
 
@@ -48,6 +51,17 @@ A comprehensive medical report processing system that transforms complex medical
 
 ---
 ## Processing Pipeline (Flow)
+
+```mermaid
+flowchart TD
+    A[Input Report (Text/Image/PDF)] --> B[OCR Extraction]
+    B --> C[Test Normalization (Regex + Aliases)]
+    C --> D{Summary Mode?}
+    D -->|Rule-based| E[Rule-based Summary]
+    D -->|LLM| F[LLM Summary via Ollama]
+    E --> G[Final Output]
+    F --> G[Final Output]
+```
 
 ## System Architecture
 
@@ -105,25 +119,26 @@ sequenceDiagram
     B-->>U: Final JSON (tests + summary + confidence)
 
 
-Technology Stack
+## Technology Stack
 
+- Backend: FastAPI (Python), Uvicorn
+- OCR: Tesseract via `pytesseract`, OpenCV preprocessing, PyMuPDF for PDFs
+- Summarization: Rule-based (default), optional LLM (Ollama `llama3:8b`)
+- Frontend: React 18 + TypeScript + Tailwind CSS (Vite)
+- Configuration: `python-dotenv` for backend, Vite env for frontend
 
-OCR: Tesseract via pytesseract, OpenCV preprocessing, PyMuPDF for PDFs
+## Setup Instructions
 
-Summarization: Rule-based (default), optional LLM (Ollama llama3:8b)
+### Backend
 
-Frontend: React 18 + TypeScript + Tailwind CSS (Vite)
+- Create `.env` at project root:
 
-Configuration: python-dotenv for backend, Vite env for frontend
-
-
-# Backend
+```env
 OLLAMA_BASE=http://127.0.0.1:11434
 OLLAMA_MODEL=llama3:8b
-
-# Frontend
 VITE_API_BASE_URL=http://127.0.0.1:8001
-
+# If Tesseract is not in default path on Windows
+TESSERACT_CMD=C:\\Program Files\\Tesseract-OCR\\tesseract.exe
 # Tesseract (if not installed in default path)
 TESSERACT_CMD=C:\\Path\\To\\tesseract.exe
 ```
