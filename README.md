@@ -21,8 +21,7 @@ A comprehensive medical report processing system that transforms complex medical
 - [Backend API](#backend-api)
 - [PowerShell-friendly curl examples](#powershell-friendly-curl-examples)
 - [Ngrok demo (public URL)](#ngrok-demo-public-url)
-- [Submission Checklist](#submission-checklist)
-- [License](#license)
+
 
 ## Features
 
@@ -54,35 +53,35 @@ A comprehensive medical report processing system that transforms complex medical
 
 ```mermaid
 flowchart TD
-    A[Input Report (Text/Image/PDF)] --> B[OCR Extraction]
-    B --> C[Test Normalization (Regex + Aliases)]
+    A["Input (Text/Image/PDF)"] --> B["OCR Extraction"]
+    B --> C["Normalization (Regex + Aliases)"]
     C --> D{Summary Mode?}
-    D -->|Rule-based| E[Rule-based Summary]
-    D -->|LLM| F[LLM Summary via Ollama]
-    E --> G[Final Output]
-    F --> G[Final Output]
+    D -->|Rule| E["Rule-based Summary"]
+    D -->|LLM| F["LLM Summary via Ollama"]
+    E --> G["Final Output"]
+    F --> G
 ```
 
 ## System Architecture
 
 ```mermaid
 flowchart LR
-    subgraph Frontend[Frontend - React + Tailwind]
+    subgraph Frontend [React + Tailwind]
         UI[User Interface]
     end
 
-    subgraph Backend[Backend - FastAPI]
+    subgraph Backend [FastAPI]
         API[REST API]
-        OCR[OCR Module - Tesseract + OpenCV]
-        NORMALIZE[Normalization (Regex + Ranges)]
-        SUMMARIZER[Summarizer (Rule-based / LLM)]
+        OCR[Tesseract + OpenCV]
+        NORMALIZE[Normalization]
+        SUMMARIZER[Summarizer]
     end
 
-    subgraph LLM[Local LLM - Ollama]
+    subgraph LLM [Ollama]
         MODEL[llama3:8b]
     end
 
-    UI -->|HTTP Requests| API
+    UI -->|HTTP| API
     API --> OCR
     API --> NORMALIZE
     NORMALIZE --> SUMMARIZER
@@ -90,34 +89,35 @@ flowchart LR
     MODEL --> SUMMARIZER
     SUMMARIZER --> API
     API --> UI
-```
 
 ## Sequence Diagram (Step-by-Step Interaction)
 
 ```mermaid
 sequenceDiagram
-    participant U as User (Frontend UI)
-    participant B as Backend (FastAPI)
-    participant O as OCR (Tesseract+OpenCV)
-    participant N as Normalizer (Regex + Aliases)
-    participant S as Summarizer (Rule-based / LLM)
-    participant L as LLM (Ollama)
+    participant UI
+    participant Backend
+    participant OCR
+    participant Normalizer
+    participant Summarizer
+    participant LLM
 
-    U->>B: Upload Report (Text/Image/PDF)
-    B->>O: Perform OCR (if Image/PDF)
-    O-->>B: Extracted Text + Confidence
-    B->>N: Normalize tests (units, ranges, statuses)
-    N-->>B: Normalized JSON
-    B->>S: Generate Summary
-    alt Rule-based
-        S-->>B: Patient-friendly summary
-    else LLM mode
-        S->>L: Prompt with normalized JSON
-        L-->>S: Generated summary
-        S-->>B: Patient-friendly summary
+    UI->>Backend: Upload report
+    alt Image/PDF
+        Backend->>OCR: Run OCR
+        OCR-->>Backend: Text + confidence
     end
-    B-->>U: Final JSON (tests + summary + confidence)
-
+    Backend->>Normalizer: Normalize tests
+    Normalizer-->>Backend: Normalized JSON
+    Backend->>Summarizer: Generate summary
+    alt Rule
+        Summarizer-->>Backend: Patient-friendly summary
+    else LLM
+        Summarizer->>LLM: Prompt with normalized JSON
+        LLM-->>Summarizer: Generated summary
+        Summarizer-->>Backend: Patient-friendly summary
+    end
+    Backend-->>UI: Final JSON
+```
 
 ## Technology Stack
 
@@ -137,10 +137,8 @@ sequenceDiagram
 OLLAMA_BASE=http://127.0.0.1:11434
 OLLAMA_MODEL=llama3:8b
 VITE_API_BASE_URL=http://127.0.0.1:8001
-# If Tesseract is not in default path on Windows
+# Tesseract (set only if not installed in default path on Windows)
 TESSERACT_CMD=C:\\Program Files\\Tesseract-OCR\\tesseract.exe
-# Tesseract (if not installed in default path)
-TESSERACT_CMD=C:\\Path\\To\\tesseract.exe
 ```
 
 - Install and run:
